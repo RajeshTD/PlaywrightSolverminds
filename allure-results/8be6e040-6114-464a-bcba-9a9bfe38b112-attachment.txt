@@ -1,0 +1,8 @@
+✅ Navigated to: https://lrpv2.solverminds.net/main
+⏳ Waited until element is visible: #nfr_login_authname
+✅ Fill the values on "Superuser" into: #nfr_login_authname
+✅ Fill the values on "P@ssw0rd" into: #nfr_login_authid
+✅ Clicked on element: #nfr_login_btnlogin
+✅ Clicked on element: #nfr_topbar_autocomp_input
+✅ Typed "Import Invoice" into: #nfr_topbar_autocomp_input
+✅ Clicked on element: //li[@data-item-label='Import Invoice']
