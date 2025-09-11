@@ -35,7 +35,8 @@ export default defineConfig({
       {
         detail: false,
         outputFolder: dest,
-        suiteTitle: false,
+        overwriteResultsDir: true,
+        suiteTitle: false
       },
     ],
   ],
