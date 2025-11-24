@@ -1,136 +1,48 @@
-import { expect } from "@playwright/test";
+// keywords/commonMethods.js
+import { expect } from "@playwright/test"; // keep if tests use expect directly
 import { allure } from "allure-playwright";
+import UIHelpers from "../Common/UIHelpers.js";
 
 export default class commonmethods {
   constructor(page) {
     this.page = page;
+    this.ui = new UIHelpers(page);
   }
 
-  async navigate(url) {
-    try {
-      await this.page.goto(url, { waitUntil: "domcontentloaded" });
-      console.log(`✅ Navigated to: ${url}`);
-
-      await allure.step(`Navigated to ${url}`, async () => {
-        const Screenshots = await this.page.screenshot();
-        allure.attachment("Screenshot", Screenshots, "image/png");
-      });
-    } catch (error) {
-      console.error(`❌ Failed to navigate to: ${url}`, error);
-      await allure.step(`❌ Failed to navigate to: ${url}`, async () => {
-        const screenshots = await this.page.screenshot();
-        allure.attachment("Screenshot", screenshots, "image/png");
-      });
-      throw error;
-    }
+  // navigation wrapper
+  async navigate(url, opts = {}) {
+    return this.ui.navigate(url, opts);
   }
 
-  async click(locator) {
-    try {
-      await this.page.locator(locator).waitFor({ state: "visible" });
-      await this.page.locator(locator).click();
-      console.log(`✅ Clicked on element: ${locator}`);
-      allure.step(`✅ Clicked on element: ${locator}`,async()=>{
-        const Scr = await this.page.screenshot();
-        allure.attachment("Screenshot", Scr, "image/png");
-      });
-    } catch (error) {
-      console.error(`❌ Failed to click element: ${locator}`, error);
-       allure.step(`❌ Failed to click element: ${locator}`, async () => {
-         const Scr = await this.page.screenshot();
-         allure.attachment("Screenshot", Scr, "image/png");
-       });
-      throw error;
-    }
+  // click wrapper - accepts string or descriptor object
+  async click(locator, opts = {}) {
+    return this.ui.click(locator, opts);
   }
 
-  async type(locator, value) {
-    try {
-      await this.page.locator(locator).waitFor({ state: "visible" });
-      await this.page.locator(locator).type(value);
-      console.log(`✅ Typed "${value}" into: ${locator}`);
-       allure.step(`✅ Typed "${value}" into: ${locator}`, async () => {
-         const Scr = await this.page.screenshot();
-         allure.attachment("Screenshot", Scr, "image/png");
-       });
-    } catch (error) {
-      console.error(`❌ Failed to type in: ${locator}`, error);
-       allure.step(`❌ Failed to type in: ${locator}`, async () => {
-         const Scr = await this.page.screenshot();
-         allure.attachment("Screenshot", Scr, "image/png");
-       });
-      throw error;
-    }
+  // type wrapper
+  async type(locator, value, opts = {}) {
+    return this.ui.type(locator, value, opts);
   }
 
-  async Filkeys(locator, value) {
-    try {
-      await this.page.locator(locator).waitFor({ state: "visible" });
-      await this.page.locator(locator).fill(value);
-      console.log(`✅ Fill the values on "${value}" into: ${locator}`);
-      allure.step(
-        `✅ Fill the values on "${value}" into: ${locator}`,
-        async () => {
-          const Scr = await this.page.screenshot();
-          allure.attachment("Screenshot", Scr, "image/png");
-        }
-      );
-    } catch (error) {
-      console.error(`❌ Failed to type in: ${locator}`, error);
-      allure.step(
-        `❌ Failed to Fill the values on "${value}" into: ${locator}`,
-        async () => {
-          const Scr = await this.page.screenshot();
-          allure.attachment("Screenshot", Scr, "image/png");
-        }
-      );
-      throw error;
-    }
+  // fill wrapper (you previously named it Filkeys)
+  async Filkeys(locator, value, opts = {}) {
+    return this.ui.fill(locator, value, opts);
   }
 
-  async getText(locator) {
-    try {
-      await this.page.locator(locator).waitFor({ state: "visible" });
-      const text = await this.page.locator(locator).innerText();
-      console.log(`✅ Got text from ${locator}: "${text}"`);
-      allure.step(`✅ Got text from ${locator}: "${text}"`, async () => {
-        const Scr = await this.page.screenshot();
-        allure.attachment("Screenshot", Scr, "image/png");
-      });
-      return text;
-    } catch (error) {
-      console.error(`❌ Failed to get text from: ${locator}`, error);
-      allure.step(`❌ Failed to get text from: ${locator}`, async () => {
-        const Scr = await this.page.screenshot();
-        allure.attachment("Screenshot", Scr, "image/png");
-      });
-      throw error;
-    }
+  // getText wrapper
+  async getText(locator, opts = {}) {
+    return this.ui.getText(locator, opts);
   }
 
-  async verifyText(locator, expectedText) {
-    try {
-      await expect(this.page.locator(locator)).toHaveText(expectedText);
-      console.log(`✅ Verified text "${expectedText}" for: ${locator}`);
-      allure.step(
-        `✅ Verified text "${expectedText}" for: ${locator}`,
-        async () => {
-          const Scr = await this.page.screenshot();
-          allure.attachment("Screenshot", Scr, "image/png");
-        }
-      );
-    } catch (error) {
-      console.error(`❌ Text verification failed for: ${locator}`, error);
-      allure.step(`❌ Text verification failed for: ${locator}`, async () => {
-        const Scr = await this.page.screenshot();
-        allure.attachment("Screenshot", Scr, "image/png");
-      });
-      throw error;
-    }
+  // verifyText wrapper
+  async verifyText(locator, expectedText, opts = {}) {
+    return this.ui.verifyText(locator, expectedText, opts);
   }
 
-  async waitForVisible(locator) {
-    await this.page.locator(locator).waitFor({ state: "visible" });
-    console.log(`⏳ Waited until element is visible: ${locator}`);
+  // waitForVisible wrapper
+  async waitForVisible(locator, opts = {}) {
+    return this.ui.waitForVisible(locator, opts);
   }
+
+  // If you had additional custom methods in this class, keep them here and call this.ui.* as needed
 }
